@@ -111,10 +111,12 @@
 	            
 	             // 
 	             if (data && data.status === 'play') {
-	             	marqueeWrapper.stop();
-	             	cancelRequestAnimFrame(data.id);
-
 	             	self.data('marquee', {'status' : 'stop'});
+	             	cancelRequestAnimFrame(data.id);
+	             	marqueeWrapper.stop(true,true);
+	             	
+
+	             	
 
 
 	             }
