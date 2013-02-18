@@ -1,21 +1,11 @@
 jQuery-Marquee
 ==============
 
-jQuery plugin to scroll the text like the old traditional marquee
-
+Модифицированный плаги на основе 
 **Blog post:** http://aamirafridi.com/jquery/jquery-marquee-plugin
 
-Options:
---------
- - **speed:** Speed in milliseconds of the marquee. Please make note that same speed value will react differently for text with different lengths. Default is 10000.</li>
- - **gap:** Gap in pixels between the tickers. Default is 20</li>
- - **delayBeforeStart:** Time in milliseconds before the marquee starts animating. Default is 1000</li>
- - **direction:** Direction towards which the marquee will animate 'left' or 'right'. Default is 'left'</li>
+Добавлен метод $('.marquee').marquee('stop');
 
-Demo:
------
- - **Demo link:** http://jsfiddle.net/aamir/UUfn2/3/show/
- - **Playground:** http://jsfiddle.net/aamir/UUfn2/3/
 
 Use:
 ----
@@ -52,4 +42,16 @@ $('.marquee').marquee({
 	//'left' or 'right'
 	direction: 'left'
 });
+
+$('.play').on('click', function () {
+	console.log(2)
+	$('.marquee').marquee();
+});
+
+
+$('.stop').on('click', function () {
+	console.log(1)
+	$('.marquee').marquee('stop');
+});
+
 ```
