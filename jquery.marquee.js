@@ -1,8 +1,6 @@
 /**
  * jQuery.marquee - scrolling text horizontally
- * Date: 11/01/2013
- * @author Aamir Afridi - aamirafridi(at)gmail(dot)com | http://www.aamirafridi.com
- * @version 1.0
+ * 
  */
 
 ;(function($) {
@@ -39,86 +37,85 @@
 			clearTimeout
 	})();
 
+
 	var methods = {
 		init : function( options ) { 
 		   return this.each(function(){
 
-			// Extend the options if any provided
-			var o = $.extend({}, defaults, options),
-				$this = $(this),
-				$marqueeWrapper,
-				data = $this.data('marquee'),
-				elWidth;
+				// Extend the options if any provided
+				var options	= $.extend({}, defaults, options),
+					self 	= $(this),
+					data	= self.data('marquee'),
+					marqueeWrapper,
+					elWidth;
 
-			//check if element has data attributes. They have top priority
-			o = $.extend({}, o, $this.data());
+				//check if element has data attributes. They have top priority
+				options = $.extend({}, options, self.data());
 
-	 
-			// Если плагин не был инициализирован
-			if (!data) {
-				//wrap inner content into a div
-				$this.wrapInner('<div class="js-marquee"></div>');
-		  
-				//Make copy of the element
-				$this.find('.js-marquee').css({
-					'margin-right': o.gap, 
-					'float':'left'
-				}).clone().appendTo($this);
-		  
-				//wrap both inner elements into one div
-				$this.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
-		  
 
-			} 
+				// Если плагин не был инициализирован
+				if (!data) {
+					//wrap inner content into a div
+					self.wrapInner('<div class="js-marquee"></div>');
+
+					//Make copy of the element
+					self.find('.js-marquee').css({
+						'margin-right': options.gap, 
+						'float':'left'
+					}).clone().appendTo(self);
+
+					//wrap both inner elements into one div
+					self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
+				}
+
 				//Save the width of the each element so we can use it in animation
-				elWidth = $this.find('.js-marquee:first').width() + o.gap;
+				elWidth 		= self.find('.js-marquee:first').width() + options.gap;
+
 				//Save the reference of the wrapper
-				$marqueeWrapper = $this.find('.js-marquee-wrapper');
+				marqueeWrapper	= self.find('.js-marquee-wrapper');
 
 
-			var animate = function() {
-				$marqueeWrapper.css('margin-left', o.direction == 'left' ? 0 : '-' + elWidth + 'px');
-				//Start animating to wards left
-				$marqueeWrapper.animate({
-						'margin-left': o.direction == 'left' ? '-' + elWidth + 'px' : 0
-					},
-					o.speed, 'linear',
-					function () {
-						if ($this.data('marquee') === 'stop') {
-							animate();
+				var animate = function() {
+					marqueeWrapper.css('margin-left', options.direction == 'left' ? 0 : '-' + elWidth + 'px');
+					//Start animating to wards left
+					marqueeWrapper.animate({
+							'margin-left': options.direction == 'left' ? '-' + elWidth + 'px' : 0
+						},
+						options.speed, 'linear',
+						function () {
+							if (self.data('marquee') === 'stop') {
+								animate();
+							}
 						}
-					}
-				);
-			};
+					);
+				};
 
-			var animId = requestAnimFrame(animate);
+				var animId = requestAnimFrame(animate);
 
-			$(this).data('marquee',{
-				id : animId,
-				wrap : $marqueeWrapper
-			});
-
-
+				$(this).data('marquee',{
+					id : animId,
+					wrap : marqueeWrapper
+				});
 		   });
 		},
+		// stop animation
 		stop : function() {
 	       return this.each(function(){
 	 
-	         var $this = $(this),
-	             data = $this.data('marquee'),
-	             $marqueeWrapper = data.wrap;
+	         var self = $(this),
+	             data = self.data('marquee'),
+	             marqueeWrapper = data.wrap;
 
-	             if (data && $this.data('marquee') !== 'stop') {
-	             	$marqueeWrapper.stop(true, true);
+	             if (data && self.data('marquee') !== 'stop') {
+	             	marqueeWrapper.stop(true, true);
 	             	cancelRequestAnimFrame(data.id);
-	             	$this.data('marquee','stop')
+	             	self.data('marquee','stop')
 	             }
 	       });
 		}
 	};
 		 
 	$.fn.marquee = function( method ) {
-
 		// Метод вызывающий логику
 		if ( methods[method] ) {
 		  return methods[ method ].apply( this, Array.prototype.slice.call( arguments, 1 ));
