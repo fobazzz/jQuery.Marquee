@@ -76,6 +76,7 @@
 
 
 				var animate = function() {
+
 					marqueeWrapper.css('margin-left', options.direction == 'left' ? 0 : '-' + elWidth + 'px');
 					//Start animating to wards left
 					marqueeWrapper.animate({
@@ -83,7 +84,7 @@
 						},
 						options.speed, 'linear',
 						function () {
-							if (self.data('marquee') === 'stop') {
+							if (self.data('marquee').status !== 'stop') {
 								animate();
 							}
 						}
@@ -93,23 +94,29 @@
 				var animId = requestAnimFrame(animate);
 
 				$(this).data('marquee',{
-					id : animId,
-					wrap : marqueeWrapper
+					id 		: animId,
+					wrap 	: marqueeWrapper,
+					status 	: 'play'
 				});
 		   });
 		},
 		// stop animation
 		stop : function() {
 	       return this.each(function(){
-	 
+	 		 
 	         var self = $(this),
 	             data = self.data('marquee'),
 	             marqueeWrapper = data.wrap;
-
-	             if (data && self.data('marquee') !== 'stop') {
-	             	marqueeWrapper.stop(true, true);
+	             // 
+	            
+	             // 
+	             if (data && data.status === 'play') {
+	             	marqueeWrapper.stop();
 	             	cancelRequestAnimFrame(data.id);
-	             	self.data('marquee','stop')
+
+	             	self.data('marquee', {'status' : 'stop'});
+
+
 	             }
 	       });
 		}
