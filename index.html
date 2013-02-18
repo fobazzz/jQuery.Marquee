@@ -6,16 +6,29 @@
 		<script>
 			$(function(){
 				$('.marquee').marquee();
-				$('.marquee-with-options').marquee({
-					//speed in milliseconds of the marquee
-					speed: 15000,
-					//gap in pixels between the tickers
-					gap: 50,
-					//gap in pixels between the tickers
-					delayBeforeStart: 0,
-					//'left' or 'right'
-					direction: 'left'
+
+				$('.play').on('click', function () {
+					console.log(2)
+					$('.marquee').marquee();
 				});
+
+				
+				$('.stop').on('click', function () {
+					console.log(1)
+					$('.marquee').marquee('stop');
+				});
+
+
+				// $('.marquee-with-options').marquee({
+				// 	//speed in milliseconds of the marquee
+				// 	speed: 15000,
+				// 	//gap in pixels between the tickers
+				// 	gap: 50,
+				// 	//gap in pixels between the tickers
+				// 	delayBeforeStart: 0,
+				// 	//'left' or 'right'
+				// 	direction: 'left'
+				// });
 			});
 		</script>
 		<style type="text/css">
@@ -47,12 +60,14 @@
 		</ul>
 
 		<h2>Default options</h2>
+		<a class="stop">stop</a>
+		<a class="play">play</a>
 		<div class='marquee'>Lorem ipsum dolor sit amet, consectetur adipiscing elit END.</div>
 		
-		<h2>Options as data attributes</h2>
+<!-- 		<h2>Options as data attributes</h2>
 		<div data-speed="2000" data-gap="30" data-direction="right" class='marquee'>Lorem ipsum dolor sit amet, consectetur adipiscing elit END.</div>
 		
 		<h2>Options passed with javascript object</h2>
-		<div class='marquee-with-options'>Lorem ipsum dolor sit amet, consectetur adipiscing elit END.</div>
+		<div class='marquee-with-options'>Lorem ipsum dolor sit amet, consectetur adipiscing elit END.</div> -->
 	</body>
 </html>
