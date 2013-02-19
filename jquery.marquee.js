@@ -99,7 +99,7 @@
 				element = $(this).marquee('get');
 
 			return requestAnimFrame(function () {
-				console.log(self.data('marquee'));
+				// console.log(self.data('marquee'));
 				animate(element, self.data('marquee'));
 			});
 			
