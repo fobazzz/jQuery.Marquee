@@ -1,10 +1,11 @@
 jQuery-Marquee
 ==============
 
-Модифицированный плаги на основе 
-**Blog post:** http://aamirafridi.com/jquery/jquery-marquee-plugin
+Модифицированный плаги на основе http://aamirafridi.com/jquery/jquery-marquee-plugin и https://github.com/imefisto/jQuery-Marquee
 
 Добавлен метод $('.marquee').marquee('stop');
+Анимация через requestAnimFrame;
+
 
 
 Use:
@@ -44,13 +45,11 @@ $('.marquee').marquee({
 });
 
 $('.play').on('click', function () {
-	console.log(2)
 	$('.marquee').marquee();
 });
 
 
 $('.stop').on('click', function () {
-	console.log(1)
 	$('.marquee').marquee('stop');
 });
 

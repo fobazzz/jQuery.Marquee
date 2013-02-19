@@ -1,9 +1,15 @@
 /**
- * jQuery.marquee - scrolling text horizontally
- * 
- */
+* jQuery.marquee - scrolling text horizontally
+* Date: 11/01/2013
+* @author Aamir Afridi - aamirafridi(at)gmail(dot)com | http://www.aamirafridi.com
+* @version 1.0
+*/
 
 ;(function($) {
+
+	var handler = {
+		element : 'js-marquee',
+	};
 
 	var defaults = {
 		//speed in milliseconds of the marquee
@@ -13,7 +19,9 @@
 		//gap in pixels between the tickers
 		delayBeforeStart: 1000,
 		//'left' or 'right'
-		direction: 'left'
+		direction: 'left',
+		after  : function () {},
+		before : function () {}
 	};
 
 	var requestAnimFrame = (function(){
@@ -23,7 +31,6 @@
 			window.oRequestAnimationFrame      || 
 			window.msRequestAnimationFrame     || 
 			function(/* function */ callback, /* DOMElement */ element){
-				// console.log(222);
 				return window.setTimeout(callback, 1000 / 60);
 			};
 	})();
@@ -38,89 +45,80 @@
 	})();
 
 
+	var animate = function(element, settings) {
+		settings.after();
+		element.css('margin-left', settings.direction == 'left' ? 0 : '-' + settings.elWidth + 'px');
+		//Start animating to wards left
+		element.animate({
+				'margin-left': settings.direction == 'left' ? '-' + settings.elWidth + 'px' : 0
+			},
+			settings.speed, 'linear',
+			function () {
+				settings.before();
+				animate(element, settings);
+			}
+		);
+	};
+
+
 	var methods = {
 		init : function( options ) { 
 		   return this.each(function(){
-
-				// Extend the options if any provided
-				var options	= $.extend({}, defaults, options),
-					self 	= $(this),
-					data	= self.data('marquee'),
-					marqueeWrapper,
+		   		var self = $(this),
+		   			marqueeWrapper,
 					elWidth;
 
-				//check if element has data attributes. They have top priority
-				options = $.extend({}, options, self.data());
+				var settings = self.data('marquee');
 
+				// initialization plugin 
+				if (typeof settings === 'undefined') {
+					// Extend the options if any provided
+					settings	= $.extend({}, defaults, options);
 
-				// Если плагин не был инициализирован
-				if (!data) {
-					//wrap inner content into a div
-					self.wrapInner('<div class="js-marquee"></div>');
+					self.wrapInner('<div class="'+handler.element+'"></div>');
 
 					//Make copy of the element
-					self.find('.js-marquee').css({
-						'margin-right': options.gap, 
+					self.find('.'+handler.element).css({
+						'margin-right': settings.gap, 
 						'float':'left'
 					}).clone().appendTo(self);
 
-					//wrap both inner elements into one div
 					self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
+					settings.elWidth    = self.find('.js-marquee:first').width() + settings.gap;
 				}
 
-				//Save the width of the each element so we can use it in animation
-				elWidth 		= self.find('.js-marquee:first').width() + options.gap;
-
-				//Save the reference of the wrapper
-				marqueeWrapper	= self.find('.js-marquee-wrapper');
-
-
-				var animate = function() {
-
-					marqueeWrapper.css('margin-left', options.direction == 'left' ? 0 : '-' + elWidth + 'px');
-					//Start animating to wards left
-					marqueeWrapper.animate({
-							'margin-left': options.direction == 'left' ? '-' + elWidth + 'px' : 0
-						},
-						options.speed, 'linear',
-						function () {
-							if (self.data('marquee').status !== 'stop') {
-								animate();
-							}
-						}
-					);
-				};
-
-				var animId = requestAnimFrame(animate);
-
-				$(this).data('marquee',{
-					id 		: animId,
-					wrap 	: marqueeWrapper,
-					status 	: 'play'
-				});
+				self.data('marquee',settings);
+				self.marquee('start');
 		   });
 		},
-		// stop animation
+		get   : function () {
+			return $(this).find('.js-marquee-wrapper');
+		},
+		start : function () {
+			var self	= $(this),
+				element = $(this).marquee('get');
+
+			return requestAnimFrame(function () {
+				console.log(self.data('marquee'));
+				animate(element, self.data('marquee'));
+			});
+			
+		},
+		zero : function () {
+			var self 		= $(this),
+			 	element 	= self.marquee('get'),	
+				settings	= self.data('marquee');
+
+			element.css('margin-left', settings.direction == 'left' ? 0 : '-' + settings.elWidth + 'px');
+		},
+		pause : function () {
+			var element = $(this).marquee('get');
+			element.stop(true);
+			element.clearQueue();
+		},
 		stop : function() {
-	       return this.each(function(){
-	 		 
-	         var self = $(this),
-	             data = self.data('marquee'),
-	             marqueeWrapper = data.wrap;
-	             // 
-	            
-	             // 
-	             if (data && data.status === 'play') {
-	             	self.data('marquee', {'status' : 'stop'});
-	             	cancelRequestAnimFrame(data.id);
-	             	marqueeWrapper.stop(true,true);
-	             	
-
-	             	
-
-
-	             }
-	       });
+			$(this).marquee('pause');
+			$(this).marquee('zero');
 		}
 	};
 		 
@@ -131,7 +129,7 @@
 		} else if ( typeof method === 'object' || ! method ) {
 		  return methods.init.apply( this, arguments );
 		} else {
-		  $.error( 'Метод ' +  method + ' не существует в jQuery.marquee' );
+			$.error('Method ' + method + ' does not exist on jQuery.marquee');
 		}    
 
 	};
