@@ -100,7 +100,7 @@
 		},
 		stop : function() {
 			var data = $(this).marquee('options');
-			if (data.timerId) {
+			if (data && data.timerId) {
 				clearInterval(data.timerId);
 			}
 			$(this).marquee('pause');
