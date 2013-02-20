@@ -1,4 +1,4 @@
-;(function($) {
+(function($) {
 
 	var handler = {
 		element : 'js-marquee',
