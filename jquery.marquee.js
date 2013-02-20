@@ -1,4 +1,3 @@
-
 ;(function($) {
 
 	var handler = {
@@ -60,13 +59,13 @@
 
 					self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
 					settings.elWidth    = self.find('.js-marquee:first').width() + settings.gap;
-					self.find('.js-marquee:not(:first)').hide();
+					self.find('.js-marquee:gt(0)').hide();
 				} else {
 					
 				}
 				
 				settings.timerId = setTimeout(function() {
-					self.find('.js-marquee:not(:first)').show();
+					self.find('.js-marquee:gt(0)').show();
 					self.marquee('start');
 				}, settings.delayBeforeStart);
 
@@ -108,7 +107,7 @@
 			
 				$(this).marquee('pause');
 				$(this).marquee('zero');
-				$(this).find('.js-marquee:not(:first)').hide();
+				$(this).find('.js-marquee:gt(0)').hide();
 			}
 		}
 	};
