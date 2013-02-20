@@ -22,18 +22,16 @@
 	var animate = function(element, settings) {
 
 		settings.after();
-		console.time('start');
 		
-
 		//Start animating to wards left
 		element.animate({
 				'margin-left': settings.direction == 'left' ? '-' + settings.elWidth + 'px' : 0
 			},
 			settings.speed, 'linear',
 			function () {
-				settings.before();
 				element.css('margin-left', settings.direction == 'left' ? 0 : '-' + settings.elWidth + 'px');
 				animate(element, settings);
+				settings.before();
 			}
 		);
 	};
@@ -97,8 +95,9 @@
 		},
 		pause : function () {
 			var element = $(this).marquee('get');
-			element.stop(true);
 			element.clearQueue();
+			element.stop(true);
+			
 		},
 		stop : function() {
 			var data = $(this).marquee('options');

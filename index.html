@@ -5,7 +5,18 @@
 		<script src="jquery.marquee.js"></script>
 		<script>
 			$(function(){
-				$('.marquee').marquee();
+				var i =0;
+				$('.marquee').marquee({
+						before : function () {
+							i++;
+							console.log(i);
+							if (i == 3) {
+									$('.marquee').marquee('stop');
+							}
+						}
+					});
+				
+
 
 				$('.play').on('click', function () {
 					$('.marquee').marquee();
