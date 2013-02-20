@@ -1,9 +1,3 @@
-/**
-* jQuery.marquee - scrolling text horizontally
-* Date: 11/01/2013
-* @author Aamir Afridi - aamirafridi(at)gmail(dot)com | http://www.aamirafridi.com
-* @version 1.0
-*/
 
 ;(function($) {
 
@@ -13,9 +7,9 @@
 
 	var defaults = {
 		//speed in milliseconds of the marquee
-		speed: 10000,
+		speed: 15000,
 		//gap in pixels between the tickers
-		gap: 20,
+		gap: 30,
 		//gap in pixels between the tickers
 		delayBeforeStart: 1000,
 		//'left' or 'right'
@@ -24,30 +18,13 @@
 		before : function () {}
 	};
 
-	var requestAnimFrame = (function(){
-		return  window.requestAnimationFrame       || 
-			window.webkitRequestAnimationFrame || 
-			window.mozRequestAnimationFrame    || 
-			window.oRequestAnimationFrame      || 
-			window.msRequestAnimationFrame     || 
-			function(/* function */ callback, /* DOMElement */ element){
-				return window.setTimeout(callback, 1000 / 60);
-			};
-	})();
-
-	var cancelRequestAnimFrame = (function() {
-		return window.cancelAnimationFrame          ||
-			window.webkitCancelRequestAnimationFrame    ||
-			window.mozCancelRequestAnimationFrame       ||
-			window.oCancelRequestAnimationFrame     ||
-			window.msCancelRequestAnimationFrame        ||
-			clearTimeout
-	})();
-
 
 	var animate = function(element, settings) {
+
 		settings.after();
-		element.css('margin-left', settings.direction == 'left' ? 0 : '-' + settings.elWidth + 'px');
+		console.time('start');
+		
+
 		//Start animating to wards left
 		element.animate({
 				'margin-left': settings.direction == 'left' ? '-' + settings.elWidth + 'px' : 0
@@ -55,6 +32,7 @@
 			settings.speed, 'linear',
 			function () {
 				settings.before();
+				element.css('margin-left', settings.direction == 'left' ? 0 : '-' + settings.elWidth + 'px');
 				animate(element, settings);
 			}
 		);
@@ -64,8 +42,8 @@
 	var methods = {
 		init : function( options ) { 
 		   return this.each(function(){
-		   		var self = $(this),
-		   			marqueeWrapper,
+				var self = $(this),
+					marqueeWrapper,
 					elWidth;
 
 				var settings = self.data('marquee');
@@ -85,28 +63,33 @@
 
 					self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
 					settings.elWidth    = self.find('.js-marquee:first').width() + settings.gap;
+				} else {
+					
 				}
+				
+				settings.timerId = setTimeout(function() {
+					self.find('.js-marquee:not(:first)').show();
+					self.marquee('start');
+				}, settings.delayBeforeStart);
 
 				self.data('marquee',settings);
-				self.marquee('start');
 		   });
 		},
 		get   : function () {
 			return $(this).find('.js-marquee-wrapper');
 		},
+		options : function () {
+			return $(this).data('marquee');
+		},
 		start : function () {
 			var self	= $(this),
 				element = $(this).marquee('get');
 
-			return requestAnimFrame(function () {
-				// console.log(self.data('marquee'));
-				animate(element, self.data('marquee'));
-			});
-			
+			animate(element, self.data('marquee'));
 		},
 		zero : function () {
 			var self 		= $(this),
-			 	element 	= self.marquee('get'),	
+				element 	= self.marquee('get'),	
 				settings	= self.data('marquee');
 
 			element.css('margin-left', settings.direction == 'left' ? 0 : '-' + settings.elWidth + 'px');
@@ -117,8 +100,11 @@
 			element.clearQueue();
 		},
 		stop : function() {
+			var data = $(this).marquee('options');
+			clearInterval(data.timerId);
 			$(this).marquee('pause');
 			$(this).marquee('zero');
+			$(this).find('.js-marquee:not(:first)').hide();
 		}
 	};
 		 

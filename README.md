@@ -4,7 +4,6 @@ jQuery-Marquee
 Модифицированный плаги на основе http://aamirafridi.com/jquery/jquery-marquee-plugin и https://github.com/imefisto/jQuery-Marquee
 
 Добавлен метод $('.marquee').marquee('stop');
-Анимация через requestAnimFrame;
 
 
 
