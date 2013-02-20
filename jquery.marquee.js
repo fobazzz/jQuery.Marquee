@@ -63,6 +63,7 @@
 
 					self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
 					settings.elWidth    = self.find('.js-marquee:first').width() + settings.gap;
+					self.find('.js-marquee:not(:first)').hide();
 				} else {
 					
 				}
