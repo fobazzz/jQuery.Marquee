@@ -100,12 +100,16 @@
 		},
 		stop : function() {
 			var data = $(this).marquee('options');
-			if (data && data.timerId) {
-				clearInterval(data.timerId);
+			if (data ) {
+				if (data.timerId) {
+					clearInterval(data.timerId);
+				}
+				
+			
+				$(this).marquee('pause');
+				$(this).marquee('zero');
+				$(this).find('.js-marquee:not(:first)').hide();
 			}
-			$(this).marquee('pause');
-			$(this).marquee('zero');
-			$(this).find('.js-marquee:not(:first)').hide();
 		}
 	};
 		 
