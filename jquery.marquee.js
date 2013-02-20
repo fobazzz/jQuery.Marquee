@@ -20,7 +20,6 @@
 
 
 	var animate = function(element, settings) {
-
 		settings.after();
 		
 		//Start animating to wards left
@@ -101,7 +100,9 @@
 		},
 		stop : function() {
 			var data = $(this).marquee('options');
-			clearInterval(data.timerId);
+			if (data.timerId) {
+				clearInterval(data.timerId);
+			}
 			$(this).marquee('pause');
 			$(this).marquee('zero');
 			$(this).find('.js-marquee:not(:first)').hide();
