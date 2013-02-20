@@ -1,7 +1,7 @@
 (function($) {
 
 	var handler = {
-		element : 'js-marquee',
+		element : 'js-marquee'
 	};
 
 	var defaults = {
