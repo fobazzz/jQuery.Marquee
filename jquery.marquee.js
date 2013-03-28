@@ -14,6 +14,8 @@
 		delayBeforeStart: 1000,
 		//'left' or 'right'
 		direction: 'left',
+		// init if width > parent.width
+		runIfFit : true,
 		after  : function () {},
 		before : function () {}
 	};
@@ -41,7 +43,9 @@
 		   return this.each(function(){
 				var self = $(this),
 					marqueeWrapper,
+					notInit = false,
 					elWidth;
+
 
 				var settings = self.data('marquee');
 
@@ -50,27 +54,31 @@
 					// Extend the options if any provided
 					settings	= $.extend({}, defaults, options);
 
-					self.wrapInner('<div class="'+handler.element+'"></div>');
+					if (self.parent().witdh() < self.width() || runIfFit) {
+						self.wrapInner('<div class="'+handler.element+'"></div>');
 
-					//Make copy of the element
-					self.find('.'+handler.element).css({
-						'margin-right': settings.gap, 
-						'float':'left'
-					}).clone().appendTo(self);
+						//Make copy of the element
+						self.find('.'+handler.element).css({
+							'margin-right': settings.gap, 
+							'float':'left'
+						}).clone().appendTo(self);
 
-					self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
-					settings.elWidth    = self.find('.js-marquee:first').width() + settings.gap;
-					self.find('.js-marquee:not(:first)').hide();
-				} else {
-					
+						self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
+						settings.elWidth    = self.find('.js-marquee:first').width() + settings.gap;
+						self.find('.js-marquee:not(:first)').hide();
+					} else {
+						notInit = true;
+					}
 				}
 				
-				settings.timerId = setTimeout(function() {
-					self.find('.js-marquee:not(:first)').show();
-					self.marquee('start');
-				}, settings.delayBeforeStart);
+				if (!notInit) {
+					settings.timerId = setTimeout(function() {
+						self.find('.js-marquee:not(:first)').show();
+						self.marquee('start');
+					}, settings.delayBeforeStart);
 
-				self.data('marquee',settings);
+					self.data('marquee',settings);
+				}
 		   });
 		},
 		get   : function () {
