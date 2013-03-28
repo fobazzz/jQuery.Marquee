@@ -14,7 +14,7 @@
 		//'left' or 'right'
 		direction: 'left',
 		// init if width > parent.width
-		runIfFit : true,
+		runIfFit : false,
 		after  : function () {},
 		before : function () {}
 	};
@@ -52,14 +52,15 @@
 				if (typeof settings === 'undefined') {
 					// Extend the options if any provided
 					settings	= $.extend({}, defaults, options);
+					
+					self.wrapInner('<div class="'+handler.element+'"></div>');
+					var wrap = self.find('.'+handler.element).css({'float':'left'});
 
-					if (self.parent().witdh() < self.width() || runIfFit) {
-						self.wrapInner('<div class="'+handler.element+'"></div>');
+					if (self.width() < wrap.width()) {
 
 						//Make copy of the element
 						self.find('.'+handler.element).css({
-							'margin-right': settings.gap, 
-							'float':'left'
+							'margin-right': settings.gap
 						}).clone().appendTo(self);
 
 						self.wrapInner('<div style="width:100000px" class="js-marquee-wrapper"></div>');
@@ -70,7 +71,7 @@
 					}
 				}
 				
-				if (!notInit) {
+				if (!notInit && typeof settings !== 'undefined') {
 					settings.timerId = setTimeout(function() {
 						self.find('.js-marquee:not(:first)').show();
 						self.marquee('start');
