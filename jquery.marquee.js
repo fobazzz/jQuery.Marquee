@@ -1,8 +1,7 @@
-
-;(function($) {
+(function($) {
 
 	var handler = {
-		element : 'js-marquee',
+		element : 'js-marquee'
 	};
 
 	var defaults = {
@@ -116,7 +115,7 @@
 			
 				$(this).marquee('pause');
 				$(this).marquee('zero');
-				$(this).find('.js-marquee:not(:first)').hide();
+				$(this).find('.js-marquee:gt(0)').hide();
 			}
 		}
 	};
