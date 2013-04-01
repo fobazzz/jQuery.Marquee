@@ -56,7 +56,9 @@
 					self.wrapInner('<div class="'+handler.element+'"></div>');
 					var wrap = self.find('.'+handler.element).css({'float':'left'});
 
-					if (self.width() < wrap.width()) {
+					// console.log(self.width() , wrap.width());
+
+					if (self.width() <= wrap.width() || settings.runIfFit) {
 
 						//Make copy of the element
 						self.find('.'+handler.element).css({
@@ -113,7 +115,6 @@
 					clearInterval(data.timerId);
 				}
 				
-			
 				$(this).marquee('pause');
 				$(this).marquee('zero');
 				$(this).find('.js-marquee:gt(0)').hide();
@@ -132,5 +133,5 @@
 		}    
 
 	};
-
+	
 })(jQuery);
